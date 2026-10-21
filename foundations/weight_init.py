@@ -6,7 +6,7 @@ from typing import List
 
 class Solution:
     
-
+    # unused
     def xavier_init(self, fan_in: int, fan_out: int) -> List[List[float]]:
         # Return a (fan_out x fan_in) weight matrix using Xavier/Glorot normal initialization
         # Use torch.manual_seed(0) for reproducibility
@@ -16,6 +16,7 @@ class Solution:
         W = torch.randn(fan_out, fan_in) * std
         return torch.round(W, decimals=4).tolist()
 
+    # unused
     def kaiming_init(self, fan_in: int, fan_out: int) -> List[List[float]]:
         # Return a (fan_out x fan_in) weight matrix using Kaiming/He normal initialization (for ReLU)
         # Use torch.manual_seed(0) for reproducibility
@@ -37,14 +38,14 @@ class Solution:
 
             if init_type == 'xavier':
                 std = math.sqrt(2/(fan_in + fan_out))
-                W.append(torch.randn(fan_out, fan_in) * std)
             
             elif init_type == 'kaiming':
                 std = math.sqrt(2/fan_in)
-                W.append(torch.randn(fan_out, fan_in) * std)
             
             else:
-                W.append(torch.randn(fan_out, fan_in))
+                std = 1.0
+            
+            W.append(torch.randn(fan_out, fan_in) * std)
         
         stds = []
         inp = torch.randn(input_dim)
