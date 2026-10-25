@@ -42,9 +42,11 @@ class Solution:
                 if layer.weight.grad is not None:
                     grad_stats.append(
                         {
-                            'mean': round(layer.weight.grad.mean().item(),4),
-                             'std': round(layer.weight.grad.std().item(),4),
-                             'norm': round(torch.norm(layer.weight.grad.detach()).item(), 4)
+                            # detach: Keeps the tensor values, but stop PyTorch from tracking how they were created.
+                            'mean': round(layer.weight.grad.detach().mean().item(),4),
+                             'std': round(layer.weight.grad.detach().std().item(),4),
+                             'norm': round(torch.norm(layer.weight.grad.detach()).item(), 4) 
+                            
 
                         }
                     )
