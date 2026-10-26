@@ -31,9 +31,7 @@ class Solution:
             sent_enc = []
             for word in sentence.split(" "):
                 sent_enc.append(word_idx_enc[word])
-            sent_enc = torch.tensor(sent_enc)
-            neg_enc.append(sent_enc)
-            
+            neg_enc.append(torch.tensor(sent_enc))
         
         # neg_enc = torch.squeeze(nn.utils.rnn.pad_sequence(neg_enc, batch_first=True, padding_value=0), dim=0)
         # pos_enc = torch.squeeze(nn.utils.rnn.pad_sequence(pos_enc, batch_first=True, padding_value=0), dim=0)
