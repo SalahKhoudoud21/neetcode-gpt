@@ -19,7 +19,6 @@ class Solution:
             X.append(tokens[start_index: start_index + context_length])
             Y.append(tokens[start_index + 1: (start_index + 1) + context_length])
 
-
         return X, Y
         
 
