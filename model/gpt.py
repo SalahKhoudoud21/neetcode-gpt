@@ -13,9 +13,11 @@ class GPT(nn.Module):
     
         self.token_emb = nn.Embedding(num_embeddings=vocab_size, embedding_dim=model_dim)
         self.pos_emb = nn.Embedding(num_embeddings=context_length, embedding_dim=model_dim)
-        self.num_blocks = num_blocks
-        self.context_length = context_length
-        self.transformer_block = self.TransformerBlock(model_dim, num_heads)
+    
+        self.transformer_blocks = nn.Sequential(
+            *[self.TransformerBlock(model_dim, num_heads) for _ in range(num_blocks)] # '*' used for unpacking
+        )
+
         self.ln = nn.LayerNorm(model_dim)
         self.linear = nn.Linear(model_dim, vocab_size)
 
@@ -25,12 +27,12 @@ class GPT(nn.Module):
         # 2. Pass through transformer blocks
         # 3. Apply final LayerNorm, then project to vocab_size
         # 4. Return logits rounded to 4 decimal places (no softmax)
-        x = self.token_emb(context) + self.pos_emb(torch.arange(context_length))
-        for _ in range(self.num_blocks):
-            x = self.transformer_block(x)
+        seq_len = context.shape[1]
+        x = self.token_emb(context) + self.pos_emb(torch.arange(seq_len))
+        x = self.transformer_blocks(x)
         x = self.ln(x)
-        y = self.linear(x)
-        return torch.round(y, decimals=4)
+        logits = self.linear(x)
+        return torch.round(logits, decimals=4)
         
 
     # Do NOT modify the code below this line
